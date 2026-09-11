@@ -1,72 +1,1948 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>CrowdGuard | Control Centre</title>
+
 <style>
-:root{--forest:#0f3629;--forest2:#173f31;--sage:#6e9073;--sage2:#9cad9d;--cream:#f4f1e8;--cream2:#e5e8e2;--tan:#ccac7e;--brown:#7b5731;--gold:#bb8e4f;--danger:#a94b45;--danger2:#f1d9d4;--ink:#14231c;--muted:#69756e;--line:#d2d7d0;--white:#fffdf8}
-*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,Arial,sans-serif}.header{min-height:72px;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:space-between;padding:14px 30px}.logo{font-size:22px;font-weight:900}.sub{font-size:11px;opacity:.75}.main{max-width:1440px;margin:auto;padding:22px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.card{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 8px 25px rgba(15,54,41,.07)}.label{font-size:10px;font-weight:800;letter-spacing:.09em;color:var(--muted)}.big{font-size:27px;font-weight:900;color:var(--forest);margin-top:6px}.grid{display:grid;grid-template-columns:1.35fr .8fr;gap:18px;margin-top:18px}.card+.card{margin-top:18px}h2{font-size:18px;color:var(--forest);margin:0 0 12px}.venue-shell{border:1px solid #cbd0c8;border-radius:16px;overflow:hidden;background:#dfe5db}.venue{display:block;width:100%;height:auto}.legend{font-size:11px;color:var(--muted);margin-top:9px}.risk-panel{display:flex;align-items:center;justify-content:space-between;background:var(--forest);color:var(--cream);border-radius:16px;padding:16px}.risk-score{font-size:38px;font-weight:900}.risk-level{font-weight:900;padding:8px 12px;border-radius:999px;background:var(--sage)}.risk-level.critical,.risk-level.high{background:var(--danger)}.risk-level.medium{background:var(--gold);color:var(--ink)}.row{display:grid;grid-template-columns:1fr 120px 1.2fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.row:last-child{border-bottom:0}.status{font-weight:900;color:var(--forest)}.emergency-stack{display:flex;flex-direction:column;gap:9px;max-height:430px;overflow:auto}.emergency{border:1px solid #d7c1a7;background:#faf6ed;border-radius:15px;padding:13px}.emergency.new{border-left:5px solid var(--brown)}.etype{font-size:15px;font-weight:900;color:var(--forest)}.meta{font-size:11px;color:var(--muted);line-height:1.55;margin-top:5px}.call{margin-top:8px;border:0;border-radius:10px;padding:9px 11px;background:var(--forest);color:var(--cream);font-weight:800;cursor:pointer}.drone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.drone{background:var(--cream2);border-radius:14px;padding:12px}.drone-name{font-weight:900;color:var(--forest);font-size:13px}.battery{height:7px;background:#cfd5cf;border-radius:999px;overflow:hidden;margin-top:8px}.battery span{display:block;height:100%;background:var(--sage)}select,.apply{width:100%;padding:12px;border-radius:11px;border:1px solid var(--line)}.apply{margin-top:9px;background:var(--brown);color:var(--cream);font-weight:900;cursor:pointer}.note{font-size:11px;color:var(--muted);line-height:1.45}.critical-note{display:none;margin-bottom:10px;padding:10px 12px;border-radius:12px;background:var(--danger2);color:#5e2825;font-size:12px;font-weight:800}.critical-note.show{display:block}@media(max-width:1000px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}@media(max-width:600px){.header{padding:12px 15px}.main{padding:12px}.drone-grid{grid-template-columns:1fr}}
+
+:root{
+    --forest:#0f3629;
+    --forest2:#173f31;
+    --sage:#6e9073;
+    --sage2:#9cad9d;
+    --cream:#f4f1e8;
+    --cream2:#e5e8e2;
+    --tan:#ccac7e;
+    --brown:#7b5731;
+    --gold:#bb8e4f;
+    --danger:#a94b45;
+    --danger2:#f1d9d4;
+    --ink:#14231c;
+    --muted:#69756e;
+    --line:#d2d7d0;
+    --white:#fffdf8;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:Inter,Arial,sans-serif;
+}
+
+.header{
+    min-height:72px;
+    background:var(--forest);
+    color:var(--cream);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 30px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:900;
+}
+
+.sub{
+    font-size:11px;
+    opacity:.75;
+}
+
+.main{
+    max-width:1440px;
+    margin:auto;
+    padding:22px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.stat,
+.card{
+    background:rgba(255,255,255,.88);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 8px 25px rgba(15,54,41,.07);
+}
+
+.label{
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.09em;
+    color:var(--muted);
+}
+
+.big{
+    font-size:27px;
+    font-weight:900;
+    color:var(--forest);
+    margin-top:6px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1.35fr .8fr;
+    gap:18px;
+    margin-top:18px;
+}
+
+.card+.card{
+    margin-top:18px;
+}
+
+h2{
+    font-size:18px;
+    color:var(--forest);
+    margin:0 0 12px;
+}
+
+.venue-shell{
+    border:1px solid #cbd0c8;
+    border-radius:16px;
+    overflow:hidden;
+    background:#dfe5db;
+}
+
+.venue{
+    display:block;
+    width:100%;
+    height:auto;
+}
+
+.legend{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:9px;
+}
+
+.risk-panel{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--forest);
+    color:var(--cream);
+    border-radius:16px;
+    padding:16px;
+}
+
+.risk-score{
+    font-size:38px;
+    font-weight:900;
+}
+
+.risk-level{
+    font-weight:900;
+    padding:8px 12px;
+    border-radius:999px;
+    background:var(--sage);
+}
+
+.risk-level.critical,
+.risk-level.high{
+    background:var(--danger);
+}
+
+.risk-level.medium{
+    background:var(--gold);
+    color:var(--ink);
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 120px 1.2fr;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    font-size:12px;
+}
+
+.row:last-child{
+    border-bottom:0;
+}
+
+.status{
+    font-weight:900;
+    color:var(--forest);
+}
+
+.emergency-stack{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    max-height:430px;
+    overflow:auto;
+}
+
+.emergency{
+    border:1px solid #d7c1a7;
+    background:#faf6ed;
+    border-radius:15px;
+    padding:13px;
+}
+
+.emergency.new{
+    border-left:5px solid var(--brown);
+}
+
+.etype{
+    font-size:15px;
+    font-weight:900;
+    color:var(--forest);
+}
+
+.meta{
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.55;
+    margin-top:5px;
+}
+
+.call{
+    margin-top:8px;
+    border:0;
+    border-radius:10px;
+    padding:9px 11px;
+    background:var(--forest);
+    color:var(--cream);
+    font-weight:800;
+    cursor:pointer;
+}
+
+.drone-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+}
+
+.drone{
+    background:var(--cream2);
+    border-radius:14px;
+    padding:12px;
+}
+
+.drone-name{
+    font-weight:900;
+    color:var(--forest);
+    font-size:13px;
+}
+
+.battery{
+    height:7px;
+    background:#cfd5cf;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.battery span{
+    display:block;
+    height:100%;
+    background:var(--sage);
+}
+
+select,
+.apply{
+    width:100%;
+    padding:12px;
+    border-radius:11px;
+    border:1px solid var(--line);
+}
+
+.apply{
+    margin-top:9px;
+    background:var(--brown);
+    color:var(--cream);
+    font-weight:900;
+    cursor:pointer;
+}
+
+.note{
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.45;
+}
+
+.critical-note{
+    display:none;
+    margin-bottom:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:var(--danger2);
+    color:#5e2825;
+    font-size:12px;
+    font-weight:800;
+}
+
+.critical-note.show{
+    display:block;
+}
+
+/* Security personnel */
+
+.guard-header{
+    display:grid;
+    grid-template-columns:1fr 120px 1.2fr;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:2px solid var(--line);
+    font-size:11px;
+    color:var(--muted);
+    font-weight:900;
+}
+
+.guard-row{
+    display:grid;
+    grid-template-columns:1fr 120px 1.2fr;
+    gap:10px;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+    font-size:12px;
+}
+
+.guard-row:last-child{
+    border-bottom:0;
+}
+
+.guard-name{
+    font-weight:900;
+    color:var(--forest);
+}
+
+.guard-status{
+    font-weight:900;
+}
+
+.guard-status.standby{
+    color:var(--sage);
+}
+
+.guard-status.responding,
+.guard-status.navigating{
+    color:var(--danger);
+}
+
+.guard-location{
+    color:var(--muted);
+}
+
+/* Responsive */
+
+@media(max-width:1000px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .header{
+        padding:12px 15px;
+    }
+
+    .main{
+        padding:12px;
+    }
+
+    .drone-grid{
+        grid-template-columns:1fr;
+    }
+
+    .guard-header,
+    .guard-row{
+        grid-template-columns:1fr 100px 1fr;
+        gap:6px;
+    }
+
+}
+
 </style>
+
 </head>
+
+
 <body>
-<header class="header"><div><div class="logo">CrowdGuard Control Centre</div><div class="sub">Laptop operations dashboard</div></div><div class="sub">● LIVE SYSTEM</div></header>
+
+<header class="header">
+
+    <div>
+        <div class="logo">
+            CrowdGuard Control Centre
+        </div>
+
+        <div class="sub">
+            Laptop operations dashboard
+        </div>
+    </div>
+
+    <div class="sub">
+        ● LIVE SYSTEM
+    </div>
+
+</header>
+
+
 <main class="main">
+
+
+<!-- ==================== TOP STATISTICS ==================== -->
+
 <section class="stats">
-<div class="stat"><div class="label">TOTAL CROWD</div><div id="crowdCount" class="big">--</div></div>
-<div class="stat"><div class="label">DENSITY LEVEL</div><div id="density" class="big">--</div></div>
-<div class="stat"><div class="label">RISK LEVEL</div><div id="topRiskLevel" class="big">--</div></div>
-<div class="stat"><div class="label">RISK SCORE</div><div id="riskScoreTop" class="big">--</div></div>
+
+    <div class="stat">
+        <div class="label">
+            TOTAL CROWD
+        </div>
+
+        <div id="crowdCount" class="big">
+            --
+        </div>
+    </div>
+
+
+    <div class="stat">
+        <div class="label">
+            DENSITY LEVEL
+        </div>
+
+        <div id="density" class="big">
+            --
+        </div>
+    </div>
+
+
+    <div class="stat">
+        <div class="label">
+            RISK LEVEL
+        </div>
+
+        <div id="topRiskLevel" class="big">
+            --
+        </div>
+    </div>
+
+
+    <div class="stat">
+        <div class="label">
+            RISK SCORE
+        </div>
+
+        <div id="riskScoreTop" class="big">
+            --
+        </div>
+    </div>
+
 </section>
+
+
+
 <div class="grid">
+
+
+<!-- ========================================================= -->
+<!-- LEFT SIDE -->
+<!-- ========================================================= -->
+
 <section>
+
+
+<!-- ==================== VENUE OVERVIEW ==================== -->
+
 <div class="card">
-<h2>Venue Overview</h2>
-<div id="criticalNotice" class="critical-note">Critical situation active — the red area marks the current Critical Zone.</div>
-<div class="venue-shell">
-<svg id="adminVenue" class="venue" viewBox="0 0 1000 650" aria-label="Top view of concert venue">
-<rect width="1000" height="650" fill="#dfe5db"/>
-<rect x="35" y="35" width="930" height="580" rx="32" fill="#c8d5c7" stroke="#7f9883" stroke-width="5"/>
-<rect x="90" y="85" width="820" height="470" rx="24" fill="#edf0e8" stroke="#9aa99b" stroke-width="3"/>
-<rect x="395" y="100" width="210" height="90" rx="14" fill="#7b5731"/><text x="500" y="153" text-anchor="middle" fill="#f4f1e8" font-size="25" font-weight="800">STAGE</text>
-<rect x="170" y="220" width="660" height="265" rx="28" fill="#d8e1d5" stroke="#a9b5a9" stroke-width="2"/><text x="500" y="350" text-anchor="middle" fill="#6b776e" font-size="22" font-weight="800">MAIN CROWD AREA</text>
-<rect x="52" y="270" width="75" height="100" rx="14" fill="#9cad9d"/><text x="89" y="325" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800" transform="rotate(-90 89 325)">EXIT A</text>
-<rect x="873" y="270" width="75" height="100" rx="14" fill="#9cad9d"/><text x="910" y="325" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800" transform="rotate(90 910 325)">EXIT B</text>
-<rect x="455" y="565" width="90" height="55" rx="12" fill="#9cad9d"/><text x="500" y="598" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800">EXIT C</text>
-<g id="adminCritical" visibility="hidden">
-<circle cx="500" cy="330" r="105" fill="#a94b45" opacity=".24" stroke="#a94b45" stroke-width="5"/>
-<text x="500" y="322" text-anchor="middle" fill="#7d302c" font-size="20" font-weight="900">CRITICAL ZONE</text>
-<text x="500" y="348" text-anchor="middle" fill="#7d302c" font-size="14" font-weight="700">HIGH CROWD RISK</text>
-</g>
-<g id="adminGuards"></g><g id="adminDrones"></g>
-</svg>
+
+    <h2>
+        Venue Overview
+    </h2>
+
+
+    <div id="criticalNotice" class="critical-note">
+        Critical situation active — the red area marks the current Critical Zone.
+    </div>
+
+
+    <div class="venue-shell">
+
+        <svg
+            id="adminVenue"
+            class="venue"
+            viewBox="0 0 1000 650"
+            aria-label="Top view of concert venue"
+        >
+
+            <rect
+                width="1000"
+                height="650"
+                fill="#dfe5db"
+            />
+
+
+            <rect
+                x="35"
+                y="35"
+                width="930"
+                height="580"
+                rx="32"
+                fill="#c8d5c7"
+                stroke="#7f9883"
+                stroke-width="5"
+            />
+
+
+            <rect
+                x="90"
+                y="85"
+                width="820"
+                height="470"
+                rx="24"
+                fill="#edf0e8"
+                stroke="#9aa99b"
+                stroke-width="3"
+            />
+
+
+            <!-- Stage -->
+
+            <rect
+                x="395"
+                y="100"
+                width="210"
+                height="90"
+                rx="14"
+                fill="#7b5731"
+            />
+
+            <text
+                x="500"
+                y="153"
+                text-anchor="middle"
+                fill="#f4f1e8"
+                font-size="25"
+                font-weight="800"
+            >
+                STAGE
+            </text>
+
+
+            <!-- Main crowd -->
+
+            <rect
+                x="170"
+                y="220"
+                width="660"
+                height="265"
+                rx="28"
+                fill="#d8e1d5"
+                stroke="#a9b5a9"
+                stroke-width="2"
+            />
+
+            <text
+                x="500"
+                y="350"
+                text-anchor="middle"
+                fill="#6b776e"
+                font-size="22"
+                font-weight="800"
+            >
+                MAIN CROWD AREA
+            </text>
+
+
+            <!-- Exit A -->
+
+            <rect
+                x="52"
+                y="270"
+                width="75"
+                height="100"
+                rx="14"
+                fill="#9cad9d"
+            />
+
+            <text
+                x="89"
+                y="325"
+                text-anchor="middle"
+                fill="#173f31"
+                font-size="13"
+                font-weight="800"
+                transform="rotate(-90 89 325)"
+            >
+                EXIT A
+            </text>
+
+
+            <!-- Exit B -->
+
+            <rect
+                x="873"
+                y="270"
+                width="75"
+                height="100"
+                rx="14"
+                fill="#9cad9d"
+            />
+
+            <text
+                x="910"
+                y="325"
+                text-anchor="middle"
+                fill="#173f31"
+                font-size="13"
+                font-weight="800"
+                transform="rotate(90 910 325)"
+            >
+                EXIT B
+            </text>
+
+
+            <!-- Exit C -->
+
+            <rect
+                x="455"
+                y="565"
+                width="90"
+                height="55"
+                rx="12"
+                fill="#9cad9d"
+            />
+
+            <text
+                x="500"
+                y="598"
+                text-anchor="middle"
+                fill="#173f31"
+                font-size="13"
+                font-weight="800"
+            >
+                EXIT C
+            </text>
+
+
+            <!-- Critical zone -->
+
+            <g id="adminCritical" visibility="hidden">
+
+                <circle
+                    cx="500"
+                    cy="330"
+                    r="105"
+                    fill="#a94b45"
+                    opacity=".24"
+                    stroke="#a94b45"
+                    stroke-width="5"
+                />
+
+                <text
+                    x="500"
+                    y="322"
+                    text-anchor="middle"
+                    fill="#7d302c"
+                    font-size="20"
+                    font-weight="900"
+                >
+                    CRITICAL ZONE
+                </text>
+
+                <text
+                    x="500"
+                    y="348"
+                    text-anchor="middle"
+                    fill="#7d302c"
+                    font-size="14"
+                    font-weight="700"
+                >
+                    HIGH CROWD RISK
+                </text>
+
+            </g>
+
+
+            <!-- Guards -->
+
+            <g id="adminGuards"></g>
+
+
+            <!-- Drones -->
+
+            <g id="adminDrones"></g>
+
+        </svg>
+
+    </div>
+
+
+    <div class="legend">
+
+        Top-view venue • red = Critical Zone only during a critical situation •
+        green = guards • gold = drones
+
+    </div>
+
 </div>
-<div class="legend">Top-view venue • red = Critical Zone only during a critical situation • green = guards • gold = drones</div>
+
+
+
+<!-- ==================== LIVE DRONE FEED ==================== -->
+
+<div class="card">
+
+    <h2>
+        Live Drone Feed
+    </h2>
+
+
+    <div class="venue-shell">
+
+        <svg
+            viewBox="0 0 1000 300"
+            class="venue"
+        >
+
+            <rect
+                width="1000"
+                height="300"
+                fill="#dfe5db"
+            />
+
+
+            <rect
+                x="30"
+                y="25"
+                width="940"
+                height="250"
+                rx="24"
+                fill="#c8d5c7"
+                stroke="#7f9883"
+                stroke-width="4"
+            />
+
+
+            <text
+                x="500"
+                y="135"
+                text-anchor="middle"
+                fill="#173f31"
+                font-size="26"
+                font-weight="900"
+            >
+                LIVE DRONE VIEW
+            </text>
+
+
+            <text
+                x="500"
+                y="170"
+                text-anchor="middle"
+                fill="#69756e"
+                font-size="15"
+                font-weight="700"
+            >
+                Venue monitoring feed
+            </text>
+
+
+            <circle
+                cx="900"
+                cy="65"
+                r="8"
+                fill="#a94b45"
+            />
+
+
+            <text
+                x="920"
+                y="70"
+                fill="#5e2825"
+                font-size="12"
+                font-weight="900"
+            >
+                LIVE
+            </text>
+
+        </svg>
+
+    </div>
+
 </div>
-<div class="card"><h2>Live Drone Feed</h2><div class="venue-shell"><svg viewBox="0 0 1000 300" class="venue"><rect width="1000" height="300" fill="#dfe5db"/><rect x="30" y="25" width="940" height="250" rx="24" fill="#c8d5c7" stroke="#7f9883" stroke-width="4"/><text x="500" y="135" text-anchor="middle" fill="#173f31" font-size="26" font-weight="900">LIVE DRONE VIEW</text><text x="500" y="170" text-anchor="middle" fill="#69756e" font-size="15" font-weight="700">Venue monitoring feed</text><circle cx="900" cy="65" r="8" fill="#a94b45"/><text x="920" y="70" fill="#5e2825" font-size="12" font-weight="900">LIVE</text></svg></div></div>
-<div class="card"><h2>Security Personnel</h2><div class="row"><strong>Guard</strong><strong>Status</strong><strong>Location</strong></div><div id="guardsList"></div></div>
-<div class="card"><h2>Drone Monitoring</h2><div id="droneList" class="drone-grid"></div></div>
+
+
+
+<!-- ========================================================= -->
+<!-- SECURITY PERSONNEL -->
+<!-- ========================================================= -->
+
+<div class="card">
+
+    <h2>
+        Security Personnel
+    </h2>
+
+
+    <div class="guard-header">
+
+        <strong>
+            Guard
+        </strong>
+
+        <strong>
+            Status
+        </strong>
+
+        <strong>
+            Location
+        </strong>
+
+    </div>
+
+
+    <div id="guardsList">
+
+        <div class="note">
+            Loading security personnel...
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================== DRONE MONITORING ==================== -->
+
+<div class="card">
+
+    <h2>
+        Drone Monitoring
+    </h2>
+
+
+    <div
+        id="droneList"
+        class="drone-grid"
+    >
+    </div>
+
+</div>
+
+
 </section>
+
+
+
+<!-- ========================================================= -->
+<!-- RIGHT SIDE -->
+<!-- ========================================================= -->
+
 <section>
-<div class="card"><h2>Current Risk Assessment</h2><div class="risk-panel"><div><div class="label" style="color:#f4f1e8">RISK SCORE</div><div id="riskScore" class="risk-score">--</div></div><div id="riskLevel" class="risk-level">--</div></div><div class="row" style="margin-top:12px"><span>Affected zone</span><strong id="zone">--</strong></div><div class="row"><span>Emergency</span><strong id="emergency">--</strong></div><div class="row"><span>Guard response</span><strong id="guardStatus">--</strong></div><div class="row"><span>Incident status</span><strong id="incidentStatus">--</strong></div></div>
-<div class="card"><h2>Behaviour Analysis</h2><div class="row"><span>Movement intensity</span><strong id="movement">--</strong></div><div class="row"><span>Directional change</span><strong id="directional">--</strong></div><div class="row"><span>Prediction score</span><strong id="prediction">--</strong></div></div>
-<div class="card"><h2>Live Incidents</h2><div id="incidentMessage" class="note">No active incident.</div></div>
-<div class="card"><h2>Emergency Services</h2><div id="sosIndicator" class="label" style="margin-bottom:9px">NO ACTIVE CALLS</div><div id="emergencyContainer" class="emergency-stack"><div class="emergency">NO ACTIVE EMERGENCY CALLS</div></div></div>
-<div class="card"><h2>Simulation Control</h2><select id="scenario"><option value="NORMAL">Normal</option><option value="BUILDUP">Crowd Buildup</option><option value="CRITICAL">Critical Emergency</option></select><button class="apply" onclick="applyScenario()">APPLY SCENARIO</button><div id="simulationMessage" class="note" style="margin-top:8px"></div></div>
-</section>
+
+
+<!-- ==================== CURRENT RISK ==================== -->
+
+<div class="card">
+
+    <h2>
+        Current Risk Assessment
+    </h2>
+
+
+    <div class="risk-panel">
+
+        <div>
+
+            <div
+                class="label"
+                style="color:#f4f1e8"
+            >
+                RISK SCORE
+            </div>
+
+
+            <div
+                id="riskScore"
+                class="risk-score"
+            >
+                --
+            </div>
+
+        </div>
+
+
+        <div
+            id="riskLevel"
+            class="risk-level"
+        >
+            --
+        </div>
+
+    </div>
+
+
+    <div
+        class="row"
+        style="margin-top:12px"
+    >
+
+        <span>
+            Affected zone
+        </span>
+
+        <strong id="zone">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="row">
+
+        <span>
+            Emergency
+        </span>
+
+        <strong id="emergency">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="row">
+
+        <span>
+            Guard response
+        </span>
+
+        <strong id="guardStatus">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="row">
+
+        <span>
+            Incident status
+        </span>
+
+        <strong id="incidentStatus">
+            --
+        </strong>
+
+    </div>
+
 </div>
+
+
+
+<!-- ==================== BEHAVIOUR ==================== -->
+
+<div class="card">
+
+    <h2>
+        Behaviour Analysis
+    </h2>
+
+
+    <div class="row">
+
+        <span>
+            Movement intensity
+        </span>
+
+        <strong id="movement">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="row">
+
+        <span>
+            Directional change
+        </span>
+
+        <strong id="directional">
+            --
+        </strong>
+
+    </div>
+
+
+    <div class="row">
+
+        <span>
+            Prediction score
+        </span>
+
+        <strong id="prediction">
+            --
+        </strong>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================== LIVE INCIDENTS ==================== -->
+
+<div class="card">
+
+    <h2>
+        Live Incidents
+    </h2>
+
+
+    <div
+        id="incidentMessage"
+        class="note"
+    >
+        No active incident.
+    </div>
+
+</div>
+
+
+
+<!-- ==================== EMERGENCY SERVICES ==================== -->
+
+<div class="card">
+
+    <h2>
+        Emergency Services
+    </h2>
+
+
+    <div
+        id="sosIndicator"
+        class="label"
+        style="margin-bottom:9px"
+    >
+        NO ACTIVE CALLS
+    </div>
+
+
+    <div
+        id="emergencyContainer"
+        class="emergency-stack"
+    >
+
+        <div class="emergency">
+            NO ACTIVE EMERGENCY CALLS
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================== SIMULATION CONTROL ==================== -->
+
+<div class="card">
+
+    <h2>
+        Simulation Control
+    </h2>
+
+
+    <select id="scenario">
+
+        <option value="NORMAL">
+            Normal
+        </option>
+
+        <option value="BUILDUP">
+            Crowd Buildup
+        </option>
+
+        <option value="CRITICAL">
+            Critical Emergency
+        </option>
+
+    </select>
+
+
+    <button
+        class="apply"
+        onclick="applyScenario()"
+    >
+        APPLY SCENARIO
+    </button>
+
+
+    <div
+        id="simulationMessage"
+        class="note"
+        style="margin-top:8px"
+    >
+    </div>
+
+</div>
+
+
+</section>
+
+</div>
+
 </main>
+
+
+
 <script>
-const colors={green:"#6e9073",gold:"#bb8e4f",red:"#a94b45",blue:"#416f8f"};
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
-function isCritical(d){return String(d.risk_level||"").toUpperCase()==="CRITICAL" || d.emergency===true}
-function renderVenue(venue,guards,critical){document.getElementById("adminCritical").setAttribute("visibility",critical?"visible":"hidden");document.getElementById("criticalNotice").classList.toggle("show",critical);document.getElementById("adminGuards").innerHTML=guards.map(g=>`<circle cx="${g.x}" cy="${g.y}" r="11" fill="${g.id==="Guard 1"?colors.blue:colors.green}" stroke="#f4f1e8" stroke-width="4"/><text x="${g.x}" y="${g.y-18}" text-anchor="middle" fill="#315b43" font-size="11" font-weight="900">${esc(g.id)}</text>`).join("");document.getElementById("adminDrones").innerHTML=(venue.drones||[]).map(d=>`<rect x="${d.x-9}" y="${d.y-9}" width="18" height="18" rx="5" fill="${colors.gold}" stroke="#f4f1e8" stroke-width="3"/><text x="${d.x}" y="${d.y+25}" text-anchor="middle" fill="#7b5731" font-size="11" font-weight="900">${esc(d.id)}</text>`).join("")}
-function renderDrones(ds){document.getElementById("droneList").innerHTML=(ds||[]).map(d=>`<div class="drone"><div class="drone-name">${esc(d.id)}</div><div class="meta">${esc(d.location)}<br>Battery: ${d.battery}%<br>Status: ${esc(d.status)}</div><div class="battery"><span style="width:${Math.max(0,Math.min(100,Number(d.battery)||0))}%"></span></div></div>`).join("")}
-function renderEmergencies(list){list=list||[];document.getElementById("sosIndicator").textContent=list.length?list.length+" ACTIVE CALL"+(list.length===1?"":"S"):"NO ACTIVE CALLS";document.getElementById("emergencyContainer").innerHTML=list.length?list.slice().reverse().map(i=>{const l=i.location||{};return `<div class="emergency new"><div class="etype">${esc(i.emergency_type||"Emergency")}</div><div class="meta"><strong>${esc(i.id||"SOS")}</strong><br>Zone: ${esc(l.zone||"Unknown")}<br>Coordinates: ${l.latitude!=null?Number(l.latitude).toFixed(5)+", "+Number(l.longitude).toFixed(5):"Unavailable"}<br>Received: ${esc(i.timestamp||"")}</div><button class="call" onclick="callEmergency('${esc(i.id||"")}','${esc(i.emergency_type||"Emergency")}','${esc(l.zone||"Unknown")}')">CALL</button></div>`}).join(""):"<div class='emergency'>NO ACTIVE EMERGENCY CALLS</div>"}
-async function callEmergency(sosId,type,zone){if(!confirm("Emergency services required.\n\nType: "+type+"\nLocation: "+zone+"\n\nProceed with simulated emergency call?"))return;try{const r=await fetch("/api/emergency/call",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sos_id:sosId})});const result=await r.json();if(!r.ok||!result.success)throw new Error(result.error||"Unable to contact emergency services");await update();alert("SIMULATION\n\nEmergency services contacted.")}catch(e){console.error(e);alert("Unable to complete simulated emergency call.\n\n"+e.message)}}
-async function update(){try{const [s,v,g]=await Promise.all([fetch("/api/status"),fetch("/api/venue"),fetch("/api/guards")]);if(!s.ok||!v.ok||!g.ok)throw new Error("Backend request failed");const d=await s.json(),venue=await v.json(),guards=await g.json();const critical=isCritical(d);document.getElementById("crowdCount").textContent=d.crowd_count??"--";document.getElementById("density").textContent=d.crowd_density!=null?d.crowd_density+"%":"--";document.getElementById("topRiskLevel").textContent=d.risk_level||"--";document.getElementById("riskScoreTop").textContent=d.risk_score??"--";document.getElementById("riskScore").textContent=d.risk_score??"--";document.getElementById("riskLevel").textContent=d.risk_level||"--";document.getElementById("riskLevel").className="risk-level "+String(d.risk_level||"").toLowerCase();document.getElementById("zone").textContent=critical?(d.affected_zone||"Critical Zone"):"No critical zone";document.getElementById("emergency").textContent=critical?"ACTIVE":"INACTIVE";document.getElementById("guardStatus").textContent=d.guard_status||"STANDBY";document.getElementById("incidentStatus").textContent=d.incident_status||"MONITORING";document.getElementById("movement").textContent=(d.movement_intensity??"--")+(d.movement_intensity!=null?"%":"");document.getElementById("directional").textContent=(d.directional_change??"--")+(d.directional_change!=null?"%":"");document.getElementById("prediction").textContent=(d.temporal_prediction??"--")+(d.temporal_prediction!=null?"%":"");document.getElementById("incidentMessage").textContent=critical?(d.incident_message||"Critical crowd situation detected."):"No active critical incident.";renderVenue(venue,guards,critical);renderDrones(venue.drones);renderEmergencies(d.citizen_sos_events)}catch(e){console.error(e);document.getElementById("incidentMessage").textContent="Unable to load live system data."}}
-async function applyScenario(){const scenario=document.getElementById("scenario").value;try{const r=await fetch("/api/simulation",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({scenario})});const result=await r.json();if(!r.ok||!result.success)throw new Error(result.error||"Unable to change scenario");document.getElementById("simulationMessage").textContent="Scenario applied: "+scenario;await update()}catch(e){document.getElementById("simulationMessage").textContent=e.message}}
-update();setInterval(update,2000);
+
+
+/* ========================================================= */
+/* COLORS */
+/* ========================================================= */
+
+const colors = {
+    green:"#6e9073",
+    gold:"#bb8e4f",
+    red:"#a94b45",
+    blue:"#416f8f"
+};
+
+
+
+/* ========================================================= */
+/* HTML ESCAPE */
+/* ========================================================= */
+
+function esc(v){
+
+    return String(v ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* ========================================================= */
+/* CHECK CRITICAL STATE */
+/* ========================================================= */
+
+function isCritical(d){
+
+    return (
+        String(d.risk_level || "").toUpperCase() === "CRITICAL"
+        ||
+        d.emergency === true
+    );
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER GUARDS ON VENUE MAP */
+/* ========================================================= */
+
+function renderVenue(venue, guards, critical){
+
+    document
+        .getElementById("adminCritical")
+        .setAttribute(
+            "visibility",
+            critical ? "visible" : "hidden"
+        );
+
+
+    document
+        .getElementById("criticalNotice")
+        .classList
+        .toggle(
+            "show",
+            critical
+        );
+
+
+    document
+        .getElementById("adminGuards")
+        .innerHTML = (guards || [])
+        .map(g => {
+
+            const isGuardOne =
+                g.id === "Guard 1";
+
+            return `
+
+                <circle
+                    cx="${g.x}"
+                    cy="${g.y}"
+                    r="11"
+                    fill="${isGuardOne ? colors.blue : colors.green}"
+                    stroke="#f4f1e8"
+                    stroke-width="4"
+                />
+
+                <text
+                    x="${g.x}"
+                    y="${g.y - 18}"
+                    text-anchor="middle"
+                    fill="${isGuardOne ? "#31566e" : "#315b43"}"
+                    font-size="11"
+                    font-weight="900"
+                >
+                    ${esc(g.id)}
+                </text>
+
+            `;
+
+        })
+        .join("");
+
+
+    document
+        .getElementById("adminDrones")
+        .innerHTML = (venue.drones || [])
+        .map(d => `
+
+            <rect
+                x="${d.x - 9}"
+                y="${d.y - 9}"
+                width="18"
+                height="18"
+                rx="5"
+                fill="${colors.gold}"
+                stroke="#f4f1e8"
+                stroke-width="3"
+            />
+
+            <text
+                x="${d.x}"
+                y="${d.y + 25}"
+                text-anchor="middle"
+                fill="#7b5731"
+                font-size="11"
+                font-weight="900"
+            >
+                ${esc(d.id)}
+            </text>
+
+        `)
+        .join("");
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER SECURITY PERSONNEL LIST */
+/* ========================================================= */
+
+function renderGuards(guards){
+
+    const container =
+        document.getElementById("guardsList");
+
+
+    if(!guards || guards.length === 0){
+
+        container.innerHTML = `
+
+            <div class="note">
+                No security personnel currently registered.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = guards
+        .map(g => {
+
+            const status =
+                String(g.status || "STANDBY").toLowerCase();
+
+
+            let statusClass = "standby";
+
+            if(status === "responding"){
+                statusClass = "responding";
+            }
+
+            if(status === "navigating"){
+                statusClass = "navigating";
+            }
+
+
+            return `
+
+                <div class="guard-row">
+
+                    <div class="guard-name">
+                        ${esc(g.id)}
+                    </div>
+
+
+                    <div class="guard-status ${statusClass}">
+                        ${esc(g.status || "STANDBY")}
+                    </div>
+
+
+                    <div class="guard-location">
+                        ${esc(g.location || "Unknown")}
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER DRONES */
+/* ========================================================= */
+
+function renderDrones(ds){
+
+    document
+        .getElementById("droneList")
+        .innerHTML = (ds || [])
+        .map(d => `
+
+            <div class="drone">
+
+                <div class="drone-name">
+                    ${esc(d.id)}
+                </div>
+
+
+                <div class="meta">
+
+                    ${esc(d.location)}
+
+                    <br>
+
+                    Battery: ${d.battery}%
+
+                    <br>
+
+                    Status: ${esc(d.status)}
+
+                </div>
+
+
+                <div class="battery">
+
+                    <span
+                        style="
+                            width:${Math.max(
+                                0,
+                                Math.min(
+                                    100,
+                                    Number(d.battery) || 0
+                                )
+                            )}%
+                        "
+                    >
+                    </span>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+
+/* ========================================================= */
+/* RENDER CITIZEN SOS / EMERGENCIES */
+/* ========================================================= */
+
+function renderEmergencies(list){
+
+    list = list || [];
+
+
+    document
+        .getElementById("sosIndicator")
+        .textContent =
+            list.length
+            ? list.length +
+              " ACTIVE CALL" +
+              (list.length === 1 ? "" : "S")
+            : "NO ACTIVE CALLS";
+
+
+    document
+        .getElementById("emergencyContainer")
+        .innerHTML = list.length
+
+        ? list
+            .slice()
+            .reverse()
+            .map(i => {
+
+                const l = i.location || {};
+
+                return `
+
+                    <div class="emergency new">
+
+                        <div class="etype">
+                            ${esc(
+                                i.emergency_type ||
+                                "Emergency"
+                            )}
+                        </div>
+
+
+                        <div class="meta">
+
+                            <strong>
+                                ${esc(i.id || "SOS")}
+                            </strong>
+
+                            <br>
+
+                            Zone:
+                            ${esc(l.zone || "Unknown")}
+
+                            <br>
+
+                            Coordinates:
+                            ${
+                                l.latitude != null
+                                ?
+                                Number(l.latitude).toFixed(5)
+                                +
+                                ", "
+                                +
+                                Number(l.longitude).toFixed(5)
+                                :
+                                "Unavailable"
+                            }
+
+                            <br>
+
+                            Received:
+                            ${esc(i.timestamp || "")}
+
+                        </div>
+
+
+                        <button
+                            class="call"
+                            onclick="
+                                callEmergency(
+                                    '${esc(i.id || "")}',
+                                    '${esc(
+                                        i.emergency_type ||
+                                        "Emergency"
+                                    )}',
+                                    '${esc(
+                                        l.zone ||
+                                        "Unknown"
+                                    )}'
+                                )
+                            "
+                        >
+                            CALL
+                        </button>
+
+                    </div>
+
+                `;
+
+            })
+            .join("")
+
+        :
+
+        `
+            <div class="emergency">
+                NO ACTIVE EMERGENCY CALLS
+            </div>
+        `;
+
+}
+
+
+
+/* ========================================================= */
+/* CALL EMERGENCY SERVICE */
+/* ========================================================= */
+
+async function callEmergency(
+    sosId,
+    type,
+    zone
+){
+
+    if(
+        !confirm(
+            "Emergency services required.\n\n" +
+            "Type: " + type +
+            "\nLocation: " + zone +
+            "\n\n" +
+            "Proceed with simulated emergency call?"
+        )
+    ){
+
+        return;
+    }
+
+
+    try{
+
+        const r =
+            await fetch(
+                "/api/emergency/call",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        sos_id:sosId
+                    })
+                }
+            );
+
+
+        const result =
+            await r.json();
+
+
+        if(
+            !r.ok ||
+            !result.success
+        ){
+
+            throw new Error(
+                result.error ||
+                "Unable to contact emergency services"
+            );
+
+        }
+
+
+        await update();
+
+
+        alert(
+            "SIMULATION\n\n" +
+            "Emergency services contacted."
+        );
+
+    }
+    catch(e){
+
+        console.error(e);
+
+
+        alert(
+            "Unable to complete simulated emergency call.\n\n" +
+            e.message
+        );
+
+    }
+
+}
+
+
+
+/* ========================================================= */
+/* MAIN LIVE UPDATE */
+/* ========================================================= */
+
+async function update(){
+
+    try{
+
+        const [
+            statusResponse,
+            venueResponse,
+            guardsResponse
+        ] = await Promise.all([
+
+            fetch("/api/status"),
+
+            fetch("/api/venue"),
+
+            fetch("/api/guards")
+
+        ]);
+
+
+        if(
+            !statusResponse.ok ||
+            !venueResponse.ok ||
+            !guardsResponse.ok
+        ){
+
+            throw new Error(
+                "Backend request failed"
+            );
+
+        }
+
+
+        const d =
+            await statusResponse.json();
+
+
+        const venue =
+            await venueResponse.json();
+
+
+        const guards =
+            await guardsResponse.json();
+
+
+        const critical =
+            isCritical(d);
+
+
+
+        /* ==================== */
+        /* TOP STATS */
+        /* ==================== */
+
+        document
+            .getElementById("crowdCount")
+            .textContent =
+                d.crowd_count ?? "--";
+
+
+        document
+            .getElementById("density")
+            .textContent =
+                d.crowd_density != null
+                ?
+                d.crowd_density + "%"
+                :
+                "--";
+
+
+        document
+            .getElementById("topRiskLevel")
+            .textContent =
+                d.risk_level || "--";
+
+
+        document
+            .getElementById("riskScoreTop")
+            .textContent =
+                d.risk_score ?? "--";
+
+
+
+        /* ==================== */
+        /* RISK PANEL */
+        /* ==================== */
+
+        document
+            .getElementById("riskScore")
+            .textContent =
+                d.risk_score ?? "--";
+
+
+        document
+            .getElementById("riskLevel")
+            .textContent =
+                d.risk_level || "--";
+
+
+        document
+            .getElementById("riskLevel")
+            .className =
+                "risk-level " +
+                String(
+                    d.risk_level || ""
+                ).toLowerCase();
+
+
+
+        /* ==================== */
+        /* INCIDENT DATA */
+        /* ==================== */
+
+        document
+            .getElementById("zone")
+            .textContent =
+                critical
+                ?
+                (
+                    d.affected_zone ||
+                    "Critical Zone"
+                )
+                :
+                "No critical zone";
+
+
+        document
+            .getElementById("emergency")
+            .textContent =
+                critical
+                ?
+                "ACTIVE"
+                :
+                "INACTIVE";
+
+
+        document
+            .getElementById("guardStatus")
+            .textContent =
+                d.guard_status ||
+                "STANDBY";
+
+
+        document
+            .getElementById("incidentStatus")
+            .textContent =
+                d.incident_status ||
+                "MONITORING";
+
+
+
+        /* ==================== */
+        /* BEHAVIOUR */
+        /* ==================== */
+
+        document
+            .getElementById("movement")
+            .textContent =
+                (d.movement_intensity ?? "--") +
+                (
+                    d.movement_intensity != null
+                    ?
+                    "%"
+                    :
+                    ""
+                );
+
+
+        document
+            .getElementById("directional")
+            .textContent =
+                (d.directional_change ?? "--") +
+                (
+                    d.directional_change != null
+                    ?
+                    "%"
+                    :
+                    ""
+                );
+
+
+        document
+            .getElementById("prediction")
+            .textContent =
+                (d.temporal_prediction ?? "--") +
+                (
+                    d.temporal_prediction != null
+                    ?
+                    "%"
+                    :
+                    ""
+                );
+
+
+
+        /* ==================== */
+        /* INCIDENT MESSAGE */
+        /* ==================== */
+
+        document
+            .getElementById("incidentMessage")
+            .textContent =
+                critical
+                ?
+                (
+                    d.incident_message ||
+                    "Critical crowd situation detected."
+                )
+                :
+                "No active critical incident.";
+
+
+
+        /* ==================== */
+        /* RENDER MAP */
+        /* ==================== */
+
+        renderVenue(
+            venue,
+            guards,
+            critical
+        );
+
+
+
+        /* ==================== */
+        /* RENDER GUARD LIST */
+        /* ==================== */
+
+        renderGuards(
+            guards
+        );
+
+
+
+        /* ==================== */
+        /* RENDER DRONES */
+        /* ==================== */
+
+        renderDrones(
+            venue.drones
+        );
+
+
+
+        /* ==================== */
+        /* RENDER EMERGENCIES */
+        /* ==================== */
+
+        renderEmergencies(
+            d.citizen_sos_events
+        );
+
+    }
+    catch(e){
+
+        console.error(e);
+
+
+        document
+            .getElementById("incidentMessage")
+            .textContent =
+                "Unable to load live system data.";
+
+    }
+
+}
+
+
+
+/* ========================================================= */
+/* APPLY SIMULATION SCENARIO */
+/* ========================================================= */
+
+async function applyScenario(){
+
+    const scenario =
+        document
+            .getElementById("scenario")
+            .value;
+
+
+    try{
+
+        const r =
+            await fetch(
+                "/api/simulation",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        scenario:scenario
+                    })
+                }
+            );
+
+
+        const result =
+            await r.json();
+
+
+        if(
+            !r.ok ||
+            !result.success
+        ){
+
+            throw new Error(
+                result.error ||
+                "Unable to change scenario"
+            );
+
+        }
+
+
+        document
+            .getElementById("simulationMessage")
+            .textContent =
+                "Scenario applied: " +
+                scenario;
+
+
+        await update();
+
+    }
+    catch(e){
+
+        document
+            .getElementById("simulationMessage")
+            .textContent =
+                e.message;
+
+    }
+
+}
+
+
+
+/* ========================================================= */
+/* START LIVE UPDATES */
+/* ========================================================= */
+
+update();
+
+setInterval(
+    update,
+    2000
+);
+
 </script>
+
+
 </body>
+
 </html>
