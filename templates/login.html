@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CrowdGuard | Select Role</title>
+<style>
+:root{
+  --forest:#0f3629;--forest-2:#173f31;--sage:#6e9073;--sage-light:#d0d3cb;
+  --cream:#f4f1e8;--cream-2:#e5e8e2;--tan:#ccac7e;--brown:#7b5731;
+  --gold:#bb8e4f;--danger:#a94b45;--ink:#14231c;--muted:#6b766f;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:Inter,Arial,sans-serif;
+  background:var(--cream);color:var(--ink);display:flex;
+  align-items:center;justify-content:center;padding:clamp(16px,3vw,42px);
+}
+.shell{
+  width:min(1120px,100%);background:rgba(255,255,255,.86);
+  border:1px solid var(--sage-light);border-radius:clamp(22px,3vw,32px);
+  padding:clamp(24px,4vw,46px);
+  box-shadow:0 22px 60px rgba(15,54,41,.16);
+}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:clamp(22px,3vw,38px)}
+.brand-mark{width:52px;height:52px;border-radius:17px;background:var(--forest);position:relative;flex:0 0 auto}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;border-radius:50%;background:var(--tan)}
+.brand-mark:before{width:17px;height:17px;left:10px;top:10px}
+.brand-mark:after{width:10px;height:10px;right:10px;bottom:10px}
+.brand h1{margin:0;font-size:clamp(24px,2.4vw,31px);color:var(--forest)}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:clamp(12px,1.2vw,14px)}
+.hero{text-align:center;margin:4px 0 clamp(24px,3vw,34px)}
+.hero h2{margin:0;font-size:clamp(28px,3.4vw,42px);line-height:1.12;color:var(--forest)}
+.hero p{margin:10px 0 0;color:var(--muted);font-size:clamp(13px,1.3vw,15px)}
+.roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.2vw,24px)}
+.role{
+  position:relative;min-height:clamp(260px,25vw,320px);border:1px solid var(--sage-light);
+  border-radius:26px;padding:clamp(24px,3vw,34px);background:var(--cream-2);
+  cursor:pointer;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;
+  text-align:left;font:inherit;color:inherit;width:100%;
+}
+.role:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(15,54,41,.14)}
+.role:focus-visible{outline:3px solid rgba(110,144,115,.45);outline-offset:3px}
+.blob{position:absolute;border-radius:48% 52% 55% 45%;opacity:.9}
+.role.public .blob.one{width:125px;height:125px;right:-22px;top:-24px;background:var(--sage)}
+.role.public .blob.two{width:62px;height:62px;right:88px;top:42px;background:var(--tan)}
+.role.guard .blob.one{width:135px;height:135px;right:-30px;bottom:-34px;background:var(--forest)}
+.role.guard .blob.two{width:58px;height:58px;right:78px;bottom:54px;background:var(--gold)}
+.role-icon{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;background:var(--forest);color:var(--cream);font-size:26px;position:relative;z-index:1}
+.role.guard .role-icon{background:var(--brown)}
+.role h3{position:relative;z-index:1;margin:24px 0 7px;font-size:clamp(20px,2vw,24px);color:var(--forest)}
+.role p{position:relative;z-index:1;margin:0;max-width:430px;color:var(--muted);line-height:1.55;font-size:clamp(13px,1.2vw,15px)}
+.badge{position:absolute;z-index:2;right:22px;top:20px;padding:7px 10px;border-radius:999px;background:var(--cream);color:var(--forest);font-size:10px;font-weight:800;letter-spacing:.08em}
+#message{min-height:22px;margin:18px 0 0;text-align:center;color:var(--danger);font-size:13px}
+.admin-link{text-align:center;margin-top:24px;font-size:12px;color:var(--muted)}
+.admin-link button{border:0;background:none;color:var(--forest);font-weight:800;cursor:pointer;padding:4px}
+.admin-form{display:none;width:min(440px,100%);margin:22px auto 0;padding:20px;border-radius:20px;background:var(--cream-2)}
+.admin-form.show{display:block}
+input{width:100%;padding:14px;border:1px solid var(--sage-light);border-radius:12px;margin-top:10px;background:white;color:var(--ink);font-size:14px}
+input:focus{outline:2px solid rgba(110,144,115,.35);outline-offset:1px}
+.admin-form .submit{width:100%;margin-top:12px;padding:14px;border:0;border-radius:12px;background:var(--forest);color:var(--cream);font-weight:800;cursor:pointer}
+
+/* Tablet */
+@media(max-width:820px){
+  body{padding:20px}
+  .shell{padding:26px}
+  .roles{gap:14px}
+  .role{min-height:250px;padding:24px}
+}
+
+/* Phone portrait: one-column, touch-friendly layout */
+@media(max-width:600px){
+  body{align-items:flex-start;padding:12px;background:var(--cream)}
+  .shell{width:100%;padding:20px 16px 24px;border-radius:22px}
+  .brand{margin-bottom:26px}
+  .brand-mark{width:46px;height:46px;border-radius:15px}
+  .brand-mark:before{width:15px;height:15px;left:9px;top:9px}
+  .brand-mark:after{width:9px;height:9px;right:9px;bottom:9px}
+  .hero{margin-bottom:22px}
+  .hero h2{font-size:27px}
+  .hero p{font-size:13px}
+  .roles{grid-template-columns:1fr;gap:14px}
+  .role{min-height:0;height:auto;padding:22px;border-radius:21px}
+  .role-icon{width:52px;height:52px;border-radius:17px;font-size:23px}
+  .role h3{margin:18px 0 7px;font-size:21px}
+  .role p{font-size:13px;line-height:1.5;max-width:none;padding-right:4px}
+  .badge{right:16px;top:16px;font-size:9px;padding:6px 8px}
+  .admin-link{margin-top:20px;font-size:11px}
+  .admin-form{margin-top:18px;padding:16px;border-radius:18px}
+  input,.admin-form .submit{padding:14px;font-size:14px}
+}
+
+/* Very narrow phones */
+@media(max-width:360px){
+  body{padding:8px}
+  .shell{padding:18px 13px 20px}
+  .hero h2{font-size:24px}
+  .role{padding:19px}
+}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div><h1>CrowdGuard</h1><p>Smart crowd safety system</p></div>
+  </div>
+
+  <section class="hero">
+    <h2>How are you entering CrowdGuard?</h2>
+    <p>Choose your role to continue.</p>
+  </section>
+
+  <section class="roles">
+    <button class="role public" type="button" onclick="enterRole('citizen')" aria-label="Enter as Public User">
+      <span class="blob one"></span><span class="blob two"></span>
+      <span class="badge">NO LOGIN</span>
+      <span class="role-icon">◉</span>
+      <h3>Public User</h3>
+      <p>Explore events, view your location and receive safe-route guidance when a crowd risk is detected.</p>
+    </button>
+
+    <button class="role guard" type="button" onclick="showGuardLogin()" aria-label="Enter as Security Guard">
+      <span class="blob one"></span><span class="blob two"></span>
+      <span class="badge">GUARD ACCESS</span>
+      <span class="role-icon">✦</span>
+      <h3>Security Guard</h3>
+      <p>Receive incidents, acknowledge alerts and navigate to the affected area.</p>
+    </button>
+  </section>
+
+  <div id="message"></div>
+
+  <div class="admin-link">
+    Control Centre is laptop-only.
+    <button type="button" onclick="showAdminLogin()">Admin sign in</button>
+  </div>
+
+  <form id="guardForm" class="admin-form" onsubmit="enterGuard(event)">
+    <strong>Guard access</strong>
+    <input id="guardUsername" placeholder="Guard 1, Guard 2, Guard 3 or Guard 4" autocomplete="off">
+    <input id="guardPassword" type="password" placeholder="Password" autocomplete="current-password">
+    <button class="submit" type="submit">ENTER GUARD</button>
+  </form>
+
+  <form id="adminForm" class="admin-form" onsubmit="enterAdmin(event)">
+    <strong>Control Centre access</strong>
+    <input id="adminUsername" value="admin" placeholder="Username" autocomplete="username">
+    <input id="adminPassword" type="password" placeholder="Password" autocomplete="current-password">
+    <button class="submit" type="submit">ENTER CONTROL CENTRE</button>
+  </form>
+</main>
+
+<script>
+function setMessage(message){document.getElementById("message").textContent=message||"";}
+function enterRole(role){setMessage("");if(role==="citizen")window.location.href="/citizen";}
+function showGuardLogin(){
+  document.getElementById("adminForm").classList.remove("show");
+  document.getElementById("guardForm").classList.toggle("show");setMessage("");
+}
+function showAdminLogin(){
+  document.getElementById("guardForm").classList.remove("show");
+  document.getElementById("adminForm").classList.toggle("show");setMessage("");
+}
+function enterGuard(event){
+  event.preventDefault();
+  const username=document.getElementById("guardUsername").value.trim().toLowerCase();
+  const password=document.getElementById("guardPassword").value;
+  const match=username.match(/^guard\s*([1-4])$/);
+  if(match&&password==="guard123"){
+    window.location.href="/guard?guard_id="+encodeURIComponent("Guard "+match[1]);return;
+  }
+  setMessage("Use Guard 1 to Guard 4 with the guard password.");
+}
+function enterAdmin(event){
+  event.preventDefault();
+  const username=document.getElementById("adminUsername").value.trim();
+  const password=document.getElementById("adminPassword").value;
+  if(username==="admin"&&password==="admin123"){window.location.href="/admin";return;}
+  setMessage("Invalid Control Centre credentials.");
+}
+</script>
+</body>
+</html>
