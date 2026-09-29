@@ -1,35 +1,1530 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>CrowdGuard | Public User</title>
+
 <style>
-:root{--forest:#0f3629;--sage:#6e9073;--cream:#f4f1e8;--cream2:#e5e8e2;--brown:#7b5731;--gold:#bb8e4f;--danger:#a94b45;--danger2:#f1d9d4;--ink:#14231c;--muted:#69756e;--line:#d5d8d1}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,Arial,sans-serif}.app{width:100%;max-width:480px;margin:auto;padding:14px 14px 30px}.header{display:flex;align-items:center;justify-content:space-between;padding:5px 2px 10px}.logo{font-size:22px;font-weight:900;color:var(--forest)}.live{font-size:10px;font-weight:900;color:var(--sage)}.card{margin-top:12px;background:rgba(255,253,248,.92);border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:0 7px 22px rgba(15,54,41,.07)}.status-card{background:var(--forest);color:var(--cream)}.eyebrow{font-size:10px;letter-spacing:.1em;font-weight:900;opacity:.72}.status{font-size:30px;font-weight:900;margin-top:5px}.warning{display:none;margin-top:12px;background:var(--danger2);border:1px solid #d5a39e;color:#5e2825;border-radius:18px;padding:14px;font-size:13px}.warning.show{display:block}.warning p{margin:6px 0 0}.section-title{margin:0 0 11px;font-size:16px;color:var(--forest)}.venue-shell{border:1px solid #cbd0c8;border-radius:16px;overflow:hidden;background:#dfe5db}.venue{display:block;width:100%;height:auto}.legend{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;font-size:10px;color:var(--muted)}.legend-item{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}.red{background:var(--danger)}.blue{background:#416f8f}.green{background:var(--sage)}.gold{background:var(--gold)}.route-info{display:none;margin-top:10px;padding:11px;border-radius:13px;background:var(--cream2);font-size:12px;line-height:1.5}.route-info.show{display:block}.route-info strong{color:var(--forest)}.button{width:100%;min-height:48px;border:0;border-radius:14px;padding:13px 15px;margin-top:12px;font-size:13px;font-weight:900}.escape{background:var(--forest);color:var(--cream)}.sos{background:var(--brown);color:var(--cream)}.button:disabled{opacity:.42}.warning-button{display:none}.metric{background:var(--cream2);border-radius:13px;padding:11px}.metric span{display:block;font-size:10px;color:var(--muted);font-weight:800}.metric strong{display:block;margin-top:4px;font-size:12px;color:var(--forest)}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}select{width:100%;min-height:46px;padding:11px;border:1px solid #ccd1ca;border-radius:12px;background:#fffdf8;color:var(--ink);font-size:13px}.small-note{margin:8px 0 0;color:var(--muted);font-size:10px;line-height:1.4}@media(min-width:481px){body{padding:18px 0}.app{border:1px solid var(--line);border-radius:25px;box-shadow:0 16px 45px rgba(15,54,41,.1)}}
+
+:root{
+    --forest:#0f3629;
+    --sage:#6e9073;
+    --cream:#f4f1e8;
+    --cream2:#e5e8e2;
+    --brown:#7b5731;
+
+    --danger:#a94b45;
+    --danger-dark:#7d302c;
+    --danger2:#f1d9d4;
+
+    --high:#b84b43;
+
+    --ink:#14231c;
+    --muted:#69756e;
+    --line:#d5d8d1;
+}
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:Inter,Arial,sans-serif;
+}
+
+.app{
+    width:100%;
+    max-width:480px;
+    margin:auto;
+    padding:14px 14px 30px;
+}
+
+/* ================================
+   HEADER
+================================ */
+
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:5px 2px 10px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:900;
+    color:var(--forest);
+}
+
+.live{
+    font-size:10px;
+    font-weight:900;
+    color:var(--sage);
+}
+
+/* ================================
+   GENERAL CARD
+================================ */
+
+.card{
+    margin-top:12px;
+    background:rgba(255,253,248,.92);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:15px;
+    box-shadow:0 7px 22px rgba(15,54,41,.07);
+}
+
+/* ================================
+   STATUS CARD
+================================ */
+
+.status-card{
+    background:var(--forest);
+    color:var(--cream);
+
+    transition:
+        background .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+.status-card.high-risk{
+    background:var(--danger);
+    color:white;
+    box-shadow:
+        0 8px 25px rgba(169,75,69,.30);
+}
+
+.status-card.critical{
+    background:var(--danger-dark);
+    color:white;
+    box-shadow:
+        0 8px 30px rgba(125,48,44,.40);
+
+    animation:criticalPulse 1.8s infinite;
+}
+
+@keyframes criticalPulse{
+
+    0%{
+        box-shadow:
+            0 8px 30px rgba(125,48,44,.35);
+    }
+
+    50%{
+        box-shadow:
+            0 8px 38px rgba(169,75,69,.60);
+    }
+
+    100%{
+        box-shadow:
+            0 8px 30px rgba(125,48,44,.35);
+    }
+}
+
+.eyebrow{
+    font-size:10px;
+    letter-spacing:.1em;
+    font-weight:900;
+    opacity:.72;
+}
+
+/* ================================
+   STATUS TEXT
+================================ */
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    font-size:30px;
+    font-weight:900;
+    margin-top:5px;
+
+    line-height:1.1;
+}
+
+/*
+   Warning symbol
+*/
+
+.status-warning-icon{
+    display:none;
+
+    width:30px;
+    height:30px;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:25px;
+    line-height:1;
+
+    color:white;
+}
+
+.status-card.high-risk .status-warning-icon,
+.status-card.critical .status-warning-icon{
+    display:flex;
+}
+
+/* ================================
+   WARNING CARD
+================================ */
+
+.warning{
+    display:none;
+
+    margin-top:12px;
+
+    background:var(--danger2);
+
+    border:1px solid #d5a39e;
+
+    color:#5e2825;
+
+    border-radius:18px;
+
+    padding:14px;
+
+    font-size:13px;
+}
+
+.warning.show{
+    display:block;
+}
+
+.warning p{
+    margin:6px 0 0;
+}
+
+/* ================================
+   SECTION TITLE
+================================ */
+
+.section-title{
+    margin:0 0 11px;
+    font-size:16px;
+    color:var(--forest);
+}
+
+/* ================================
+   VENUE
+================================ */
+
+.venue-shell{
+    border:1px solid #cbd0c8;
+    border-radius:16px;
+    overflow:hidden;
+    background:#dfe5db;
+}
+
+.venue{
+    display:block;
+    width:100%;
+    height:auto;
+}
+
+/* ================================
+   LEGEND
+================================ */
+
+.legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+
+    margin-top:10px;
+
+    font-size:10px;
+    color:var(--muted);
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.red{
+    background:var(--danger);
+}
+
+.blue{
+    background:#416f8f;
+}
+
+.green{
+    background:var(--sage);
+}
+
+.gold{
+    background:#bb8e4f;
+}
+
+/* ================================
+   ROUTE INFO
+================================ */
+
+.route-info{
+    display:none;
+
+    margin-top:10px;
+
+    padding:11px;
+
+    border-radius:13px;
+
+    background:var(--cream2);
+
+    font-size:12px;
+    line-height:1.5;
+}
+
+.route-info.show{
+    display:block;
+}
+
+.route-info strong{
+    color:var(--forest);
+}
+
+/* ================================
+   BUTTONS
+================================ */
+
+.button{
+    width:100%;
+    min-height:48px;
+
+    border:0;
+    border-radius:14px;
+
+    padding:13px 15px;
+    margin-top:12px;
+
+    font-size:13px;
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.escape{
+    background:var(--forest);
+    color:var(--cream);
+}
+
+.sos{
+    background:var(--brown);
+    color:var(--cream);
+}
+
+.button:disabled{
+    opacity:.42;
+    cursor:not-allowed;
+}
+
+/* ================================
+   METRICS
+================================ */
+
+.metric{
+    background:var(--cream2);
+    border-radius:13px;
+    padding:11px;
+}
+
+.metric span{
+    display:block;
+
+    font-size:10px;
+    color:var(--muted);
+    font-weight:800;
+}
+
+.metric strong{
+    display:block;
+
+    margin-top:4px;
+
+    font-size:12px;
+    color:var(--forest);
+}
+
+.meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+/* ================================
+   SELECT
+================================ */
+
+select{
+    width:100%;
+
+    min-height:46px;
+
+    padding:11px;
+
+    border:1px solid #ccd1ca;
+
+    border-radius:12px;
+
+    background:#fffdf8;
+
+    color:var(--ink);
+
+    font-size:13px;
+}
+
+/* ================================
+   SMALL TEXT
+================================ */
+
+.small-note{
+    margin:8px 0 0;
+
+    color:var(--muted);
+
+    font-size:10px;
+    line-height:1.4;
+}
+
+/* ================================
+   DESKTOP
+================================ */
+
+@media(min-width:481px){
+
+    body{
+        padding:18px 0;
+    }
+
+    .app{
+        border:1px solid var(--line);
+        border-radius:25px;
+
+        box-shadow:
+            0 16px 45px rgba(15,54,41,.1);
+    }
+}
+
 </style>
+
 </head>
-<body><div class="app">
-<header class="header"><div class="logo">CrowdGuard</div><div class="live">● LIVE</div></header>
-<section class="card status-card"><div class="eyebrow">AREA SAFETY STATUS</div><div id="status" class="status">Loading...</div></section>
-<section id="warning" class="warning"><strong>Safety warning</strong><p>A Critical Zone is active. Follow the green route to an exit and move away from the red area.</p></section>
-<section class="card"><h2 class="section-title">Venue safety view</h2><div class="meta"><div class="metric"><span>Your position</span><strong id="yourPosition">Inside venue</strong></div><div class="metric"><span>Area status</span><strong id="mapZone">Normal</strong></div></div>
-<div class="venue-shell" style="margin-top:10px"><svg id="citizenVenue" class="venue" viewBox="0 0 1000 650" aria-label="Top view of concert venue">
-<rect width="1000" height="650" fill="#dfe5db"/><rect x="35" y="35" width="930" height="580" rx="32" fill="#c8d5c7" stroke="#7f9883" stroke-width="5"/><rect x="90" y="85" width="820" height="470" rx="24" fill="#edf0e8" stroke="#9aa99b" stroke-width="3"/>
-<rect x="395" y="100" width="210" height="90" rx="14" fill="#7b5731"/><text x="500" y="153" text-anchor="middle" fill="#f4f1e8" font-size="25" font-weight="800">STAGE</text><rect x="170" y="220" width="660" height="265" rx="28" fill="#d8e1d5" stroke="#a9b5a9" stroke-width="2"/><text x="500" y="350" text-anchor="middle" fill="#6b776e" font-size="22" font-weight="800">MAIN CROWD AREA</text>
-<rect x="52" y="270" width="75" height="100" rx="14" fill="#9cad9d"/><text x="89" y="325" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800" transform="rotate(-90 89 325)">EXIT A</text><rect x="873" y="270" width="75" height="100" rx="14" fill="#9cad9d"/><text x="910" y="325" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800" transform="rotate(90 910 325)">EXIT B</text><rect x="455" y="565" width="90" height="55" rx="12" fill="#9cad9d"/><text x="500" y="598" text-anchor="middle" fill="#173f31" font-size="13" font-weight="800">EXIT C</text>
-<g id="criticalZone" visibility="hidden"><circle cx="500" cy="330" r="105" fill="#a94b45" opacity=".24" stroke="#a94b45" stroke-width="5"/><text x="500" y="322" text-anchor="middle" fill="#7d302c" font-size="20" font-weight="900">CRITICAL ZONE</text><text x="500" y="348" text-anchor="middle" fill="#7d302c" font-size="14" font-weight="700">HIGH CROWD RISK</text></g>
-<circle id="citizenMarker" cx="280" cy="430" r="13" fill="#416f8f" stroke="#f4f1e8" stroke-width="5"/><text id="citizenLabel" x="280" y="458" text-anchor="middle" fill="#31566e" font-size="14" font-weight="900">YOU</text>
-<g id="escapeRoute" visibility="hidden"><polyline id="escapeLine" points="" fill="none" stroke="#6e9073" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="18 12"/><circle id="safeExitMarker" cx="90" cy="320" r="13" fill="#6e9073" stroke="#f4f1e8" stroke-width="5"/><text id="safeExitLabel" x="90" y="298" text-anchor="middle" fill="#315b43" font-size="14" font-weight="900">SAFE EXIT</text></g>
-</svg></div><div class="legend"><div class="legend-item"><span class="dot red"></span>Critical Zone</div><div class="legend-item"><span class="dot blue"></span>Your position</div><div class="legend-item"><span class="dot green"></span>Safe exit route</div><div class="legend-item"><span class="dot gold"></span>Venue facilities</div></div><div id="routeInfo" class="route-info"></div></section>
-<button id="escapeButton" class="button escape" onclick="showEscapeRoute()" disabled>FIND SAFE EXIT ROUTE</button>
-<section class="card"><h2 class="section-title">Emergency assistance</h2><p class="small-note">Choose the emergency type and send your request to the Control Centre.</p><select id="emergencyType"><option>Medical Emergency</option><option>Fire</option><option>Lost Person</option><option>Crowd Trapping</option><option>Security Threat</option><option>Other</option></select><button class="button sos" onclick="sendSOS()">SEND SOS</button></section>
+
+
+<body>
+
+<div class="app">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+            CrowdGuard
+        </div>
+
+        <div class="live">
+            ● LIVE
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         AREA SAFETY STATUS
+    ========================================== -->
+
+    <section
+        id="statusCard"
+        class="card status-card"
+    >
+
+        <div class="eyebrow">
+            AREA SAFETY STATUS
+        </div>
+
+        <div
+            id="status"
+            class="status"
+        >
+
+            <span
+                id="statusWarningIcon"
+                class="status-warning-icon"
+                aria-hidden="true"
+            >
+                ⚠
+            </span>
+
+            <span id="statusText">
+                Loading...
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         WARNING MESSAGE
+    ========================================== -->
+
+    <section
+        id="warning"
+        class="warning"
+    >
+
+        <strong>
+            Safety warning
+        </strong>
+
+        <p>
+            A Critical Zone is active.
+            Follow the green route to an exit
+            and move away from the red area.
+        </p>
+
+    </section>
+
+
+    <!-- =========================================
+         VENUE SAFETY VIEW
+    ========================================== -->
+
+    <section class="card">
+
+        <h2 class="section-title">
+            Venue safety view
+        </h2>
+
+
+        <div class="meta">
+
+            <div class="metric">
+
+                <span>
+                    Your position
+                </span>
+
+                <strong id="yourPosition">
+                    Inside venue
+                </strong>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Area status
+                </span>
+
+                <strong id="mapZone">
+                    Normal
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             VENUE MAP
+        ====================================== -->
+
+        <div
+            class="venue-shell"
+            style="margin-top:10px"
+        >
+
+            <svg
+                id="citizenVenue"
+                class="venue"
+                viewBox="0 0 1000 650"
+                aria-label="Top view of concert venue"
+            >
+
+                <!-- Outer venue -->
+
+                <rect
+                    width="1000"
+                    height="650"
+                    fill="#dfe5db"
+                />
+
+                <rect
+                    x="35"
+                    y="35"
+                    width="930"
+                    height="580"
+                    rx="32"
+                    fill="#c8d5c7"
+                    stroke="#7f9883"
+                    stroke-width="5"
+                />
+
+
+                <!-- Inner venue -->
+
+                <rect
+                    x="90"
+                    y="85"
+                    width="820"
+                    height="470"
+                    rx="24"
+                    fill="#edf0e8"
+                    stroke="#9aa99b"
+                    stroke-width="3"
+                />
+
+
+                <!-- Stage -->
+
+                <rect
+                    x="395"
+                    y="100"
+                    width="210"
+                    height="90"
+                    rx="14"
+                    fill="#7b5731"
+                />
+
+                <text
+                    x="500"
+                    y="153"
+                    text-anchor="middle"
+                    fill="#f4f1e8"
+                    font-size="25"
+                    font-weight="800"
+                >
+                    STAGE
+                </text>
+
+
+                <!-- Main crowd area -->
+
+                <rect
+                    x="170"
+                    y="220"
+                    width="660"
+                    height="265"
+                    rx="28"
+                    fill="#d8e1d5"
+                    stroke="#a9b5a9"
+                    stroke-width="2"
+                />
+
+                <text
+                    x="500"
+                    y="350"
+                    text-anchor="middle"
+                    fill="#6b776e"
+                    font-size="22"
+                    font-weight="800"
+                >
+                    MAIN CROWD AREA
+                </text>
+
+
+                <!-- Exit A -->
+
+                <rect
+                    x="52"
+                    y="270"
+                    width="75"
+                    height="100"
+                    rx="14"
+                    fill="#9cad9d"
+                />
+
+                <text
+                    x="89"
+                    y="325"
+                    text-anchor="middle"
+                    fill="#173f31"
+                    font-size="13"
+                    font-weight="800"
+                    transform="rotate(-90 89 325)"
+                >
+                    EXIT A
+                </text>
+
+
+                <!-- Exit B -->
+
+                <rect
+                    x="873"
+                    y="270"
+                    width="75"
+                    height="100"
+                    rx="14"
+                    fill="#9cad9d"
+                />
+
+                <text
+                    x="910"
+                    y="325"
+                    text-anchor="middle"
+                    fill="#173f31"
+                    font-size="13"
+                    font-weight="800"
+                    transform="rotate(90 910 325)"
+                >
+                    EXIT B
+                </text>
+
+
+                <!-- Exit C -->
+
+                <rect
+                    x="455"
+                    y="565"
+                    width="90"
+                    height="55"
+                    rx="12"
+                    fill="#9cad9d"
+                />
+
+                <text
+                    x="500"
+                    y="598"
+                    text-anchor="middle"
+                    fill="#173f31"
+                    font-size="13"
+                    font-weight="800"
+                >
+                    EXIT C
+                </text>
+
+
+                <!-- =================================
+                     CRITICAL ZONE
+                ================================== -->
+
+                <g
+                    id="criticalZone"
+                    visibility="hidden"
+                >
+
+                    <circle
+                        cx="500"
+                        cy="330"
+                        r="105"
+                        fill="#a94b45"
+                        opacity=".24"
+                        stroke="#a94b45"
+                        stroke-width="5"
+                    />
+
+                    <text
+                        x="500"
+                        y="322"
+                        text-anchor="middle"
+                        fill="#7d302c"
+                        font-size="20"
+                        font-weight="900"
+                    >
+                        CRITICAL ZONE
+                    </text>
+
+                    <text
+                        x="500"
+                        y="348"
+                        text-anchor="middle"
+                        fill="#7d302c"
+                        font-size="14"
+                        font-weight="700"
+                    >
+                        HIGH CROWD RISK
+                    </text>
+
+                </g>
+
+
+                <!-- =================================
+                     CITIZEN LOCATION
+                ================================== -->
+
+                <circle
+                    id="citizenMarker"
+                    cx="280"
+                    cy="430"
+                    r="13"
+                    fill="#416f8f"
+                    stroke="#f4f1e8"
+                    stroke-width="5"
+                />
+
+                <text
+                    id="citizenLabel"
+                    x="280"
+                    y="458"
+                    text-anchor="middle"
+                    fill="#31566e"
+                    font-size="14"
+                    font-weight="900"
+                >
+                    YOU
+                </text>
+
+
+                <!-- =================================
+                     ESCAPE ROUTE
+                ================================== -->
+
+                <g
+                    id="escapeRoute"
+                    visibility="hidden"
+                >
+
+                    <polyline
+                        id="escapeLine"
+                        points=""
+                        fill="none"
+                        stroke="#6e9073"
+                        stroke-width="13"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-dasharray="18 12"
+                    />
+
+                    <circle
+                        id="safeExitMarker"
+                        cx="90"
+                        cy="320"
+                        r="13"
+                        fill="#6e9073"
+                        stroke="#f4f1e8"
+                        stroke-width="5"
+                    />
+
+                    <text
+                        id="safeExitLabel"
+                        x="90"
+                        y="298"
+                        text-anchor="middle"
+                        fill="#315b43"
+                        font-size="14"
+                        font-weight="900"
+                    >
+                        SAFE EXIT
+                    </text>
+
+                </g>
+
+            </svg>
+
+        </div>
+
+
+        <!-- =====================================
+             LEGEND
+        ====================================== -->
+
+        <div class="legend">
+
+            <div class="legend-item">
+                <span class="dot red"></span>
+                Critical Zone
+            </div>
+
+            <div class="legend-item">
+                <span class="dot blue"></span>
+                Your position
+            </div>
+
+            <div class="legend-item">
+                <span class="dot green"></span>
+                Safe exit route
+            </div>
+
+            <div class="legend-item">
+                <span class="dot gold"></span>
+                Venue facilities
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             ROUTE INFORMATION
+        ====================================== -->
+
+        <div
+            id="routeInfo"
+            class="route-info"
+        ></div>
+
+    </section>
+
+
+    <!-- =========================================
+         ESCAPE ROUTE BUTTON
+    ========================================== -->
+
+    <button
+        id="escapeButton"
+        class="button escape"
+        onclick="showEscapeRoute()"
+        disabled
+    >
+        FIND SAFE EXIT ROUTE
+    </button>
+
+
+    <!-- =========================================
+         EMERGENCY ASSISTANCE
+    ========================================== -->
+
+    <section class="card">
+
+        <h2 class="section-title">
+            Emergency assistance
+        </h2>
+
+        <p class="small-note">
+            Choose the emergency type and send your request
+            to the Control Centre.
+        </p>
+
+
+        <select id="emergencyType">
+
+            <option>
+                Medical Emergency
+            </option>
+
+            <option>
+                Fire
+            </option>
+
+            <option>
+                Lost Person
+            </option>
+
+            <option>
+                Crowd Trapping
+            </option>
+
+            <option>
+                Security Threat
+            </option>
+
+            <option>
+                Other
+            </option>
+
+        </select>
+
+
+        <button
+            class="button sos"
+            onclick="sendSOS()"
+        >
+            SEND SOS
+        </button>
+
+    </section>
+
 </div>
+
+
 <script>
-let venueData=null,isCritical=false,escapeShown=false;
-function setText(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
-function drawEscape(){if(!venueData||!isCritical)return;const start=venueData.citizen_position;const exit=venueData.exits[0];const zone=venueData.critical_zone;const points=[start,{x:start.x,y:520},{x:exit.x,y:520},exit];document.getElementById("escapeLine").setAttribute("points",points.map(p=>p.x+","+p.y).join(" "));document.getElementById("escapeRoute").setAttribute("visibility","visible");document.getElementById("routeInfo").classList.add("show");document.getElementById("routeInfo").innerHTML=`<strong>Safe exit route ready</strong><br>Follow the green route to ${exit.name}. It moves away from the Critical Zone and leads to the venue boundary.`;escapeShown=true}
-async function load(){try{const [s,v]=await Promise.all([fetch("/api/status"),fetch("/api/venue")]);if(!s.ok||!v.ok)throw new Error("Unable to load public data");const d=await s.json();venueData=await v.json();isCritical=String(d.risk_level||"").toUpperCase()==="CRITICAL"||d.emergency===true;setText("status",d.risk_level||"--");setText("mapZone",isCritical?(d.affected_zone||"Critical Zone"):"No Critical Zone");document.getElementById("warning").classList.toggle("show",isCritical);document.getElementById("criticalZone").setAttribute("visibility",isCritical?"visible":"hidden");document.getElementById("escapeButton").disabled=!isCritical;if(!isCritical){document.getElementById("escapeRoute").setAttribute("visibility","hidden");document.getElementById("routeInfo").classList.remove("show");escapeShown=false}else if(escapeShown)drawEscape()}catch(e){console.error(e);setText("status","Unable to load")}}
-function showEscapeRoute(){if(!isCritical){alert("There is no active Critical Zone.");return}drawEscape()}
-async function sendSOS(){try{const type=document.getElementById("emergencyType").value;const r=await fetch("/api/citizen/sos",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({emergency_type:type})});const result=await r.json();if(!r.ok||!result.success)throw new Error(result.error||"Unable to send SOS");alert("Emergency request sent to the Control Centre.\n\nType: "+type)}catch(e){alert(e.message)}}
-load();setInterval(load,2000);
-</script></body></html>
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let venueData = null;
+let isCritical = false;
+let escapeShown = false;
+
+
+/* =====================================================
+   HELPER: SET TEXT
+===================================================== */
+
+function setText(id, value){
+
+    const element = document.getElementById(id);
+
+    if(element){
+        element.textContent = value;
+    }
+
+}
+
+
+/* =====================================================
+   GET STATUS CATEGORY
+===================================================== */
+
+function getStatusCategory(rawStatus){
+
+    const status = String(rawStatus || "")
+        .trim()
+        .toUpperCase();
+
+
+    /*
+        CRITICAL
+        Examples:
+        CRITICAL
+        CRITICAL RISK
+        CRITICAL CONDITION
+    */
+
+    if(status.includes("CRITICAL")){
+        return "critical";
+    }
+
+
+    /*
+        HIGH
+        Examples:
+        HIGH
+        HIGH RISK
+        HIGH CROWD RISK
+    */
+
+    if(status.includes("HIGH")){
+        return "high";
+    }
+
+
+    /*
+        WARNING
+    */
+
+    if(status.includes("WARNING")){
+        return "high";
+    }
+
+
+    /*
+        NORMAL / SAFE
+    */
+
+    if(
+        status.includes("NORMAL") ||
+        status.includes("SAFE")
+    ){
+        return "normal";
+    }
+
+
+    return "normal";
+}
+
+
+/* =====================================================
+   UPDATE SAFETY STATUS UI
+===================================================== */
+
+function updateStatusUI(rawStatus, emergency){
+
+    const statusCard =
+        document.getElementById("statusCard");
+
+    const statusText =
+        document.getElementById("statusText");
+
+    const warning =
+        document.getElementById("warning");
+
+    const escapeButton =
+        document.getElementById("escapeButton");
+
+    const criticalZone =
+        document.getElementById("criticalZone");
+
+
+    /*
+        Determine status
+    */
+
+    let category = getStatusCategory(rawStatus);
+
+
+    /*
+        Emergency flag forces Critical
+    */
+
+    if(emergency === true){
+        category = "critical";
+    }
+
+
+    /*
+        Remove previous status classes
+    */
+
+    statusCard.classList.remove(
+        "high-risk",
+        "critical"
+    );
+
+
+    /*
+        Set status text
+    */
+
+    statusText.textContent =
+        rawStatus || "NORMAL";
+
+
+    /*
+        NORMAL
+    */
+
+    if(category === "normal"){
+
+        isCritical = false;
+
+        statusCard.classList.remove(
+            "high-risk",
+            "critical"
+        );
+
+        warning.classList.remove("show");
+
+        escapeButton.disabled = true;
+
+        criticalZone.setAttribute(
+            "visibility",
+            "hidden"
+        );
+
+        return;
+    }
+
+
+    /*
+        HIGH
+    */
+
+    if(category === "high"){
+
+        isCritical = false;
+
+        statusCard.classList.add(
+            "high-risk"
+        );
+
+        warning.classList.remove("show");
+
+        escapeButton.disabled = true;
+
+        criticalZone.setAttribute(
+            "visibility",
+            "hidden"
+        );
+
+        return;
+    }
+
+
+    /*
+        CRITICAL
+    */
+
+    if(category === "critical"){
+
+        isCritical = true;
+
+        statusCard.classList.add(
+            "critical"
+        );
+
+        warning.classList.add(
+            "show"
+        );
+
+        escapeButton.disabled = false;
+
+        criticalZone.setAttribute(
+            "visibility",
+            "visible"
+        );
+
+        return;
+    }
+
+}
+
+
+/* =====================================================
+   DRAW ESCAPE ROUTE
+===================================================== */
+
+function drawEscape(){
+
+    if(
+        !venueData ||
+        !isCritical
+    ){
+        return;
+    }
+
+
+    const start =
+        venueData.citizen_position;
+
+
+    const exit =
+        venueData.exits[0];
+
+
+    const zone =
+        venueData.critical_zone;
+
+
+    const points = [
+
+        start,
+
+        {
+            x:start.x,
+            y:520
+        },
+
+        {
+            x:exit.x,
+            y:520
+        },
+
+        exit
+
+    ];
+
+
+    document
+        .getElementById("escapeLine")
+        .setAttribute(
+            "points",
+            points
+                .map(
+                    p => p.x + "," + p.y
+                )
+                .join(" ")
+        );
+
+
+    document
+        .getElementById("escapeRoute")
+        .setAttribute(
+            "visibility",
+            "visible"
+        );
+
+
+    document
+        .getElementById("routeInfo")
+        .classList
+        .add("show");
+
+
+    document
+        .getElementById("routeInfo")
+        .innerHTML = `
+
+            <strong>
+                Safe exit route ready
+            </strong>
+
+            <br>
+
+            Follow the green route to
+            ${exit.name}.
+
+            It moves away from the
+            Critical Zone and leads to
+            the venue boundary.
+
+        `;
+
+
+    escapeShown = true;
+
+}
+
+
+/* =====================================================
+   LOAD DATA FROM BACKEND
+===================================================== */
+
+async function load(){
+
+    try{
+
+        const [
+            statusResponse,
+            venueResponse
+        ] = await Promise.all([
+
+            fetch("/api/status"),
+
+            fetch("/api/venue")
+
+        ]);
+
+
+        /*
+            Check API responses
+        */
+
+        if(
+            !statusResponse.ok ||
+            !venueResponse.ok
+        ){
+
+            throw new Error(
+                "Unable to load public data"
+            );
+
+        }
+
+
+        /*
+            Read JSON
+        */
+
+        const statusData =
+            await statusResponse.json();
+
+
+        venueData =
+            await venueResponse.json();
+
+
+        /*
+            Extract backend status
+        */
+
+        const riskLevel =
+            statusData.risk_level ||
+            "NORMAL";
+
+
+        const emergency =
+            statusData.emergency === true;
+
+
+        /*
+            Update status UI
+        */
+
+        updateStatusUI(
+            riskLevel,
+            emergency
+        );
+
+
+        /*
+            Update map zone text
+        */
+
+        const category =
+            getStatusCategory(riskLevel);
+
+
+        setText(
+            "mapZone",
+
+            (
+                category === "critical" ||
+                emergency
+            )
+
+            ?
+
+            (
+                statusData.affected_zone ||
+                "Critical Zone"
+            )
+
+            :
+
+            category === "high"
+
+            ?
+
+            (
+                statusData.affected_zone ||
+                "High Risk Zone"
+            )
+
+            :
+
+            "No Critical Zone"
+        );
+
+
+        /*
+            Re-draw route if it was already shown
+        */
+
+        if(
+            isCritical &&
+            escapeShown
+        ){
+
+            drawEscape();
+
+        }
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "CrowdGuard load error:",
+            error
+        );
+
+
+        setText(
+            "statusText",
+            "Unable to load"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SHOW ESCAPE ROUTE
+===================================================== */
+
+function showEscapeRoute(){
+
+    if(!isCritical){
+
+        alert(
+            "There is no active Critical Zone."
+        );
+
+        return;
+    }
+
+
+    drawEscape();
+
+}
+
+
+/* =====================================================
+   SEND SOS
+===================================================== */
+
+async function sendSOS(){
+
+    try{
+
+        const type =
+            document
+                .getElementById(
+                    "emergencyType"
+                )
+                .value;
+
+
+        const response =
+            await fetch(
+                "/api/citizen/sos",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        emergency_type:type
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !result.success
+        ){
+
+            throw new Error(
+                result.error ||
+                "Unable to send SOS"
+            );
+
+        }
+
+
+        alert(
+            "Emergency request sent to the Control Centre.\n\n" +
+            "Type: " +
+            type
+        );
+
+    }
+
+    catch(error){
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+load();
+
+
+/* =====================================================
+   REFRESH EVERY 2 SECONDS
+===================================================== */
+
+setInterval(
+    load,
+    2000
+);
+
+</script>
+
+</body>
+</html>
